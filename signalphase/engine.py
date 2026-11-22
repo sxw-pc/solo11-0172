@@ -4,16 +4,17 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans
+from . import field, flow, plans, air, airadvisory
 from .store import many, one, session
 
 HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
+    'air-import': {'air_signature': air.signature, 'air_sample': air.sample, 'air_check': airadvisory.check},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'air_signature', 'air_sample', 'air_advisory', 'decision')
 
 
 def _ingest(db, command, raw):
