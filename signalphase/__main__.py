@@ -8,11 +8,11 @@ from .engine import audit, ingest, report
 
 def main():
     parser = argparse.ArgumentParser(prog='signalphase')
-    parser.add_argument('command', choices=['flow-import', 'plan-import', 'field-import', 'report', 'audit', 'demo'])
+    parser.add_argument('command', choices=['flow-import', 'plan-import', 'field-import', 'corridor-import', 'report', 'audit', 'demo'])
     parser.add_argument('--db', default='signalphase.sqlite')
     parser.add_argument('--file')
     args = parser.parse_args()
-    if args.command in {'flow-import', 'plan-import', 'field-import'}:
+    if args.command in {'flow-import', 'plan-import', 'field-import', 'corridor-import'}:
         if not args.file:
             parser.error('--file is required for imports')
         result = ingest(args.db, args.command, args.file)
