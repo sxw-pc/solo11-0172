@@ -1,0 +1,12 @@
+{"events":[
+{"id":"ice-st-1","kind":"station","station_id":"ir-north","lane_id":"north-lane","valid_from":"2026-01-01T00:00:00Z","valid_to":"2027-01-01T00:00:00Z","revision":1,"recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"ice-sf-1","kind":"frame","frame_id":"SF1","station_id":"ir-north","lane_id":"north-lane","observed_at":"2026-01-02T06:00:00Z","brightness_c":-2,"sky_c":-15,"recorded_at":"2026-01-02T06:01:00Z"},
+{"id":"ice-sf-2","kind":"frame","frame_id":"SF2","station_id":"ir-north","lane_id":"north-lane","observed_at":"2026-01-02T06:10:00Z","brightness_c":-1,"sky_c":-15,"recorded_at":"2026-01-02T06:11:00Z"},
+{"id":"ice-lc-1","kind":"lane_check","check_id":"LC1","frame_id":"SF1","lane_id":"north-lane","at":"2026-01-02T06:02:00Z","recorded_at":"2026-01-02T06:02:00Z"},
+{"id":"ice-lc-2","kind":"lane_check","check_id":"LC2","frame_id":"SF2","lane_id":"north-lane","at":"2026-01-02T06:12:00Z","recorded_at":"2026-01-02T06:12:00Z"},
+{"id":"ice-coat-1","kind":"coating","coating_id":"coat-1","lane_id":"north-lane","cycle_id":"cycle-2026-01","emissivity_min":0.85,"emissivity_max":0.9,"retained_at":"2025-12-15T00:00:00Z","recorded_at":"2026-01-01T09:00:00Z"},
+{"id":"ice-w-1","kind":"water","water_id":"w-1","lane_id":"north-lane","observed_at":"2026-01-02T05:50:00Z","state":"present","method":"patrol_visual","recorded_at":"2026-01-02T05:51:00Z"},
+{"id":"ice-cl-1","kind":"closure","closure_id":"cl-1","lane_id":"north-lane","closed_at":"2026-01-02T06:05:00Z","actor":"duty-officer-1","reason":"lane_watch_precaution","recorded_at":"2026-01-02T06:05:00Z"},
+{"id":"ice-det-1","kind":"detour","detour_id":"det-1","lane_id":"north-lane","at":"2026-01-02T06:06:00Z","note":"northbound traffic rerouted to east bypass","recorded_at":"2026-01-02T06:06:00Z"},
+{"id":"ice-ia-1","kind":"assess","assess_id":"ia-1","lane_id":"north-lane","cycle_id":"cycle-2026-01","from_at":"2026-01-02T06:00:00Z","to_at":"2026-01-02T06:10:00Z","recorded_at":"2026-01-02T06:30:00Z"}
+]}

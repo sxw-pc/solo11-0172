@@ -4,7 +4,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, surface, lane
+from . import field, flow, plans, surface, lane, ice
 from .store import many, one, session
 
 HANDLERS = {
@@ -12,9 +12,16 @@ HANDLERS = {
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
     'surface-import': {'station': surface.station, 'frame': surface.frame, 'lane_check': lane.check},
+    'ice-import': {'station': surface.station, 'frame': surface.frame, 'lane_check': lane.check,
+                   'coating': ice.coating, 'water': ice.water, 'closure': ice.closure, 'detour': ice.detour,
+                   'treatment': ice.treatment, 'contact': ice.contact, 'assess': ice.assess,
+                   'certificate': ice.certificate, 'reopen': ice.reopen},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'surface_station', 'surface_frame', 'lane_watch', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'surface_station', 'surface_frame', 'lane_watch',
+          'coating_sample', 'water_film', 'lane_closure', 'lane_detour', 'treatment', 'contact_measure',
+          'ice_frame', 'ice_frame_history', 'ice_window', 'ice_window_history', 'ice_todo',
+          'emissivity_certificate', 'lane_reopen', 'decision')
 
 
 def _ingest(db, command, raw):
