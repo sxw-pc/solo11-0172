@@ -1,0 +1,1 @@
+{"events":[{"id":"bad-field","kind":"upload","controller_id":"ctrl-wrong","plan_id":"new-peak","uploaded_at":"2026-01-02T09:10:00Z","readback_at":"2026-01-02T09:11:00Z","actor":"maint-9","readback":{"ped_distance_m":8,"ped_green_sec":20,"vehicle_green_sec":36,"phases":{"green_groups":[["pedestrian"],["north_vehicle"]],"conflicts":[["pedestrian","north_vehicle"]]}}}]}
