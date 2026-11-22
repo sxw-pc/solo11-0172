@@ -1,0 +1,1 @@
+{"events":[{"id":"hs1","kind":"head_scan","scan_id":"HS1","controller_id":"ctrl-base","head_id":"north-green","observed_at":"2026-01-02T08:06:30Z","sample_rate_hz":100,"exposure_us":1000,"values":[0,1,0,1,0,1,0,1],"recorded_at":"2026-01-02T08:08:00Z"}]}
