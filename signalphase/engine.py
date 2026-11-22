@@ -11,10 +11,17 @@ HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
-    'drain-import': {'drain_well': drain.well, 'drain_level': drain.level, 'drain_visit': draincrew.visit},
+    'drain-import': {'drain_well': drain.well, 'drain_level': drain.level, 'drain_visit': draincrew.visit,
+                     'drain_outlet': drain.outlet, 'drain_catchment': drain.catchment,
+                     'drain_rainfall': drain.rainfall, 'drain_flow': drain.flow,
+                     'drain_pump': drain.pump, 'drain_work': drain.work,
+                     'drain_dispatch': draincrew.dispatch,
+                     'drain_redispatch': draincrew.redispatch},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'drain_well', 'drain_level', 'drain_visit', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'drain_well', 'drain_level', 'drain_visit',
+          'drain_outlet', 'drain_catchment', 'drain_rainfall', 'drain_flow', 'drain_pump', 'drain_work',
+          'drain_dispatch', 'drain_balance', 'drain_gap', 'decision')
 
 
 def _ingest(db, command, raw):

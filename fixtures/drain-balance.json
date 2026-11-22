@@ -1,0 +1,10 @@
+{"events":[
+{"id":"db-dw1","kind":"drain_well","well_id":"north-curb","approach":"north","storage_area_m2":10,"valid_from":"2026-01-01T00:00:00Z","valid_to":"2027-01-01T00:00:00Z","recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"db-dl1","kind":"drain_level","level_id":"DL1","well_id":"north-curb","observed_at":"2026-01-02T08:00:00Z","depth_m":1.2,"recorded_at":"2026-01-02T08:01:00Z"},
+{"id":"db-dl2","kind":"drain_level","level_id":"DL2","well_id":"north-curb","observed_at":"2026-01-02T08:10:00Z","depth_m":1.3,"recorded_at":"2026-01-02T08:11:00Z"},
+{"id":"db-dv1","kind":"drain_visit","visit_id":"DV1","level_id":"DL1","recorded_at":"2026-01-02T08:02:00Z"},
+{"id":"db-out1","kind":"drain_outlet","outlet_id":"OUT1","well_id":"north-curb","name":"north outlet","capacity_m3h":12,"state":"open","recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"db-cb1","kind":"drain_catchment","catchment_id":"CB-ROOF","well_id":"north-curb","name":"roof catchment","surface":"roof","area_m2":1000,"runoff_coefficient":1.0,"radar_covered":true,"recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"db-cb2","kind":"drain_catchment","catchment_id":"CB-TUNNEL","well_id":"north-curb","name":"underpass tunnel catchment","surface":"tunnel","area_m2":500,"runoff_coefficient":0.9,"radar_covered":false,"recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"db-pump1","kind":"drain_pump","pump_event_id":"PUMP1","well_id":"north-curb","pump_id":"P-7","at":"2026-01-02T08:05:00Z","powered":true,"recorded_at":"2026-01-02T08:05:30Z"}
+]}
