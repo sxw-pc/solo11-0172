@@ -17,12 +17,24 @@ CREATE TABLE IF NOT EXISTS controller(id TEXT PRIMARY KEY,plan_id TEXT NOT NULL,
 CREATE TABLE IF NOT EXISTS activation(id INTEGER PRIMARY KEY,plan_id TEXT NOT NULL,plan_revision INTEGER NOT NULL,controller_id TEXT NOT NULL,started_at TEXT NOT NULL,ended_at TEXT,status TEXT NOT NULL,reason TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS rollback(id INTEGER PRIMARY KEY,failed_controller TEXT NOT NULL,restored_plan TEXT NOT NULL,restored_revision INTEGER NOT NULL,at TEXT NOT NULL,reason TEXT NOT NULL,actor TEXT NOT NULL,affected_from TEXT NOT NULL,affected_to TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at TEXT NOT NULL,to_at TEXT NOT NULL,controller_id TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS head_scan(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,head_id TEXT NOT NULL,observed_at TEXT NOT NULL,sample_rate_hz INTEGER NOT NULL,exposure_us INTEGER NOT NULL,values_json TEXT NOT NULL,plan_id TEXT,plan_revision INTEGER,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS head_scan(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,head_id TEXT NOT NULL,observed_at TEXT NOT NULL,sample_rate_hz INTEGER NOT NULL,exposure_us INTEGER NOT NULL,shutter_window_us INTEGER NOT NULL,values_json TEXT NOT NULL,plan_id TEXT,plan_revision INTEGER,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS power_group(id TEXT PRIMARY KEY,phase_id TEXT NOT NULL,controller_id TEXT NOT NULL,budget REAL NOT NULL,required_luminance REAL NOT NULL,power_to_luminance REAL NOT NULL,sync_skew_us INTEGER NOT NULL,period_us INTEGER NOT NULL,clock_ref TEXT NOT NULL,head_ids_json TEXT NOT NULL,observed_from TEXT NOT NULL,observed_to TEXT NOT NULL,plan_id TEXT,plan_revision INTEGER,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS health_verdict(id INTEGER PRIMARY KEY,group_id TEXT NOT NULL,revision INTEGER NOT NULL,head_id TEXT NOT NULL,scope TEXT NOT NULL,window_from TEXT,window_to TEXT,status TEXT NOT NULL,min_luminance REAL NOT NULL,max_luminance REAL NOT NULL,required_luminance REAL NOT NULL,min_dim_heads INTEGER NOT NULL,group_healthy INTEGER NOT NULL,work_order TEXT,control_action TEXT,evidence_json TEXT NOT NULL,superseded INTEGER NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS current_reading(id TEXT PRIMARY KEY,group_id TEXT NOT NULL,branch_id TEXT NOT NULL,head_id TEXT NOT NULL,window_from TEXT NOT NULL,window_to TEXT NOT NULL,mean_current REAL NOT NULL,calibrated_clock TEXT NOT NULL,clock_offset_us INTEGER NOT NULL,complete INTEGER NOT NULL,covers_historical_window INTEGER NOT NULL,present INTEGER NOT NULL,recorded_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS clamp_reading(id TEXT PRIMARY KEY,group_id TEXT NOT NULL,branch_id TEXT NOT NULL,head_id TEXT NOT NULL,installed_at TEXT NOT NULL,window_from TEXT NOT NULL,window_to TEXT NOT NULL,mean_current REAL NOT NULL,recorded_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS control_action(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,group_id TEXT NOT NULL,action TEXT NOT NULL,scope TEXT NOT NULL,head_id TEXT,window_from TEXT,window_to TEXT,at TEXT NOT NULL,reason TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):
     p=Path(path);p.parent.mkdir(parents=True,exist_ok=True)
     db=sqlite3.connect(p);db.row_factory=sqlite3.Row;db.executescript(DDL)
+    cols={r[1] for r in db.execute('PRAGMA table_info(head_scan)')}
+    if 'shutter_window_us' not in cols:
+        db.execute('ALTER TABLE head_scan ADD COLUMN shutter_window_us INTEGER NOT NULL DEFAULT 0')
+        db.execute('ALTER TABLE head_scan RENAME TO head_scan_legacy')
+        db.execute('CREATE TABLE head_scan(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,head_id TEXT NOT NULL,observed_at TEXT NOT NULL,sample_rate_hz INTEGER NOT NULL,exposure_us INTEGER NOT NULL,shutter_window_us INTEGER NOT NULL,values_json TEXT NOT NULL,plan_id TEXT,plan_revision INTEGER,state TEXT NOT NULL)')
+        db.execute('INSERT INTO head_scan SELECT id,controller_id,head_id,observed_at,sample_rate_hz,exposure_us,0,values_json,plan_id,plan_revision,state FROM head_scan_legacy')
+        db.execute('DROP TABLE head_scan_legacy')
     return db
 @contextmanager
 def session(path):

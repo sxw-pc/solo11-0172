@@ -4,17 +4,22 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, headscan
+from . import field, flow, plans, headscan, head_health
 from .store import many, one, session
 
 HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
-    'head-import': {'head_scan': headscan.capture},
+    'head-import': {'head_scan': headscan.capture,
+                    'power_group': head_health.register_group,
+                    'current_record': head_health.current_record,
+                    'current_gap': head_health.current_gap,
+                    'clamp_reading': head_health.clamp_reading},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'head_scan', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'head_scan', 'power_group',
+          'health_verdict', 'current_reading', 'clamp_reading', 'control_action', 'decision')
 
 
 def _ingest(db, command, raw):
