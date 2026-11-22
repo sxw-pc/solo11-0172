@@ -1,6 +1,7 @@
 """Controller readback, activation and safe baseline rollback."""
 import json
 from .plans import plan_digest
+from .corridor_capacity import invalidate_controller
 from .store import one,many,log
 
 def upload(db,e):
@@ -30,7 +31,10 @@ def upload(db,e):
     return state
 
 def fault(db,e):
-    active=one(db,"SELECT * FROM activation WHERE status='active' ORDER BY id DESC LIMIT 1")
+    if e.get('controller_id'):
+        active=one(db,"SELECT * FROM activation WHERE controller_id=? AND status='active' ORDER BY id DESC LIMIT 1",(e['controller_id'],))
+    else:
+        active=one(db,"SELECT * FROM activation WHERE status='active' ORDER BY id DESC LIMIT 1")
     if not active:raise ValueError('no_active_signal_plan')
     previous=one(db,"SELECT * FROM activation WHERE status='replaced' AND id<? ORDER BY id DESC LIMIT 1",(active['id'],))
     db.execute("UPDATE activation SET ended_at=?,status='failed',reason='controller_fault' WHERE id=?",(e['at'],active['id']))
@@ -50,5 +54,6 @@ def fault(db,e):
           (active['controller_id'],previous['plan_id'],previous['plan_revision'],e['at'],'field_fault_reverted_to_previous_safe_plan',e.get('actor','unknown'),active['started_at'],e['at']))
         outcome='rolled_back'
     else:outcome='needs_manual_safe_mode'
+    invalidate_controller(db,active['controller_id'],e['at'],'field_fault_rollback',e)
     log(db,e,'field',active['controller_id'],outcome,'controller_fault')
     return outcome

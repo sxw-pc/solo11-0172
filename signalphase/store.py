@@ -20,6 +20,12 @@ CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at T
 CREATE TABLE IF NOT EXISTS remote_signal_window(id TEXT PRIMARY KEY,intersection_id TEXT NOT NULL,green_from TEXT NOT NULL,green_to TEXT NOT NULL,verified INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS corridor_request(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,requested_at TEXT NOT NULL,remote_id TEXT NOT NULL,travel_min_sec INTEGER NOT NULL,travel_max_sec INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS corridor_check(id TEXT PRIMARY KEY,request_id TEXT NOT NULL,active_plan TEXT,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS corridor_link(id TEXT PRIMARY KEY,from_controller TEXT NOT NULL,to_intersection TEXT NOT NULL,capacity INTEGER NOT NULL,declared_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS link_event(id TEXT PRIMARY KEY,link_id TEXT NOT NULL,vehicle TEXT NOT NULL,direction TEXT NOT NULL,at TEXT NOT NULL,receipt TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS corridor_meter(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,approach TEXT NOT NULL,meter_from TEXT NOT NULL,meter_to TEXT NOT NULL,receipt TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS corridor_eval(id TEXT PRIMARY KEY,request_id TEXT NOT NULL,link_id TEXT NOT NULL,release_at TEXT NOT NULL,a_vehicle_from TEXT NOT NULL,a_vehicle_to TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL,feasible_from TEXT,feasible_to TEXT,evidence_json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS corridor_commitment(id TEXT PRIMARY KEY,request_id TEXT NOT NULL,eval_id TEXT NOT NULL,route TEXT NOT NULL,state TEXT NOT NULL,window_from TEXT,window_to TEXT,status TEXT NOT NULL,reason TEXT NOT NULL,evidence_json TEXT NOT NULL,created_at TEXT NOT NULL,closed_at TEXT);
+CREATE TABLE IF NOT EXISTS corridor_notice(id TEXT PRIMARY KEY,commitment_id TEXT NOT NULL,kind TEXT NOT NULL,at TEXT NOT NULL,detail TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):

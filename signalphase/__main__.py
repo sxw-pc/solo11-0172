@@ -21,10 +21,11 @@ def main():
     elif args.command == 'audit':
         result = audit(args.db)
     else:
-        root = Path(__file__).resolve().parent.parent / 'fixtures' / 'demo'
-        steps = [('flow-import', '01-flow.json'), ('plan-import', '02-plan.json'),
-                 ('field-import', '03-field.json'), ('field-import', '04-fault.json'),
-                 ('flow-import', '05-late-flow.json')]
+        root = Path(__file__).resolve().parent.parent / 'fixtures'
+        steps = [('flow-import', 'demo/01-flow.json'), ('plan-import', 'demo/02-plan.json'),
+                 ('field-import', 'demo/03-field.json'), ('field-import', 'demo/04-fault.json'),
+                 ('flow-import', 'demo/05-late-flow.json'),
+                 ('corridor-import', 'corridor-ok.json'), ('corridor-import', 'corridor-storage.json')]
         result = [ingest(args.db, command, root / name) for command, name in steps]
         result = {'imports': result, 'audit': audit(args.db), 'report': report(args.db)}
     print(json.dumps(result, ensure_ascii=False, indent=2))

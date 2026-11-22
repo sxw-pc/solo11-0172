@@ -4,17 +4,24 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, corridor
+from . import field, flow, plans, corridor, corridor_capacity
 from .store import many, one, session
 
 HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
-    'corridor-import': {'remote_window': corridor.remote, 'corridor_request': corridor.request, 'corridor_check': corridor.check},
+    'corridor-import': {'remote_window': corridor.remote, 'corridor_request': corridor.request,
+                        'corridor_check': corridor.check, 'remote_revoke': corridor.remote_revoke,
+                        'link': corridor_capacity.link, 'link_event': corridor_capacity.link_event,
+                        'meter': corridor_capacity.meter, 'capacity_eval': corridor_capacity.capacity_eval,
+                        'authorize': corridor_capacity.authorize, 'execute': corridor_capacity.execute,
+                        'fallback': corridor_capacity.fallback, 'notify': corridor_capacity.notify},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'remote_signal_window', 'corridor_request', 'corridor_check', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'remote_signal_window',
+          'corridor_request', 'corridor_check', 'corridor_link', 'link_event', 'corridor_meter',
+          'corridor_eval', 'corridor_commitment', 'corridor_notice', 'decision')
 
 
 def _ingest(db, command, raw):
@@ -68,13 +75,16 @@ def audit(db_path):
                     for table in TABLES}
     with tempfile.TemporaryDirectory() as temp:
         replay_db = Path(temp) / 'replay.sqlite'
+        diverged = []
         try:
             with session(replay_db) as db:
                 replay = [_ingest(db, row['command'], row['raw']) for row in sources]
                 rebuilt = {table: [tuple(row) for row in many(db, f'SELECT * FROM {table} ORDER BY rowid')]
                            for table in TABLES}
-            replay_ok = original == rebuilt and all(not x['duplicate'] for x in replay)
+            diverged = sorted(table for table in TABLES if original[table] != rebuilt[table])
+            replay_ok = not diverged and all(not x['duplicate'] for x in replay)
         except Exception:
             replay_ok = False
     return {'source_integrity': source_integrity, 'event_integrity': event_integrity,
-            'replay_ok': replay_ok, 'sources': len(sources), 'events': len(events)}
+            'replay_ok': replay_ok, 'diverged_tables': diverged,
+            'sources': len(sources), 'events': len(events)}

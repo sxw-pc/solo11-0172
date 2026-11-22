@@ -1,4 +1,5 @@
 """A second junction's observed green window and provisional corridor request."""
+from .corridor_capacity import invalidate_remote
 from .store import one, log
 
 
@@ -35,3 +36,13 @@ def check(db, e):
                (e['check_id'], route['id'], active['plan_id'] if active else None, state))
     log(db, e, 'corridor', e['check_id'], state, 'verified_ends' if state == 'provisional' else 'missing_field_evidence')
     return state
+
+
+def remote_revoke(db, e):
+    window = one(db, 'SELECT * FROM remote_signal_window WHERE id=?', (e['remote_id'],))
+    if not window:
+        raise ValueError('unknown_remote_window')
+    db.execute('UPDATE remote_signal_window SET verified=0 WHERE id=?', (e['remote_id'],))
+    invalidate_remote(db, e['remote_id'], e['at'], 'remote_readback_revoked', e)
+    log(db, e, 'corridor', e['remote_id'], 'revoked', 'remote_readback_revoked')
+    return 'revoked'

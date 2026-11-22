@@ -1,0 +1,97 @@
+{
+  "events": [
+    {
+      "id": "lk1",
+      "kind": "link",
+      "link_id": "AB-1",
+      "from_controller": "ctrl-base",
+      "to_intersection": "hospital-east",
+      "capacity": 1,
+      "recorded_at": "2026-01-02T08:05:30Z"
+    },
+    {
+      "id": "le1",
+      "kind": "link_event",
+      "link_id": "AB-1",
+      "vehicle": "v-ord-1",
+      "direction": "enter",
+      "at": "2026-01-02T08:06:39Z",
+      "receipt": "a-exit-loop-778",
+      "recorded_at": "2026-01-02T08:06:39Z"
+    },
+    {
+      "id": "le2",
+      "kind": "link_event",
+      "link_id": "AB-1",
+      "vehicle": "v-ord-1",
+      "direction": "exit",
+      "at": "2026-01-02T08:06:50Z",
+      "receipt": "b-exit-loop-901",
+      "recorded_at": "2026-01-02T08:06:50Z"
+    },
+    {
+      "id": "ce1",
+      "kind": "capacity_eval",
+      "eval_id": "CE1",
+      "request_id": "CR1",
+      "link_id": "AB-1",
+      "release_at": "2026-01-02T08:06:40Z",
+      "a_vehicle_from": "2026-01-02T08:06:35Z",
+      "a_vehicle_to": "2026-01-02T08:07:05Z",
+      "recorded_at": "2026-01-02T08:07:21Z"
+    },
+    {
+      "id": "mt1",
+      "kind": "meter",
+      "meter_id": "M1",
+      "controller_id": "ctrl-base",
+      "approach": "north",
+      "meter_from": "2026-01-02T08:06:48Z",
+      "meter_to": "2026-01-02T08:07:15Z",
+      "receipt": "meter-receipt-1",
+      "recorded_at": "2026-01-02T08:06:48Z"
+    },
+    {
+      "id": "au1",
+      "kind": "authorize",
+      "auth_id": "AU1",
+      "request_id": "CR1",
+      "eval_id": "CE1",
+      "route": "meter",
+      "approved_by": "supervisor-1",
+      "window_from": "2026-01-02T08:06:50Z",
+      "window_to": "2026-01-02T08:07:01Z",
+      "meter_id": "M1",
+      "at": "2026-01-02T08:06:50Z",
+      "recorded_at": "2026-01-02T08:06:50Z"
+    },
+    {
+      "id": "au2",
+      "kind": "authorize",
+      "auth_id": "AU2",
+      "request_id": "CR1",
+      "eval_id": "CE1",
+      "route": "trigger",
+      "approved_by": "supervisor-1",
+      "window_from": "2026-01-02T08:06:50Z",
+      "window_to": "2026-01-02T08:07:01Z",
+      "at": "2026-01-02T08:06:50Z",
+      "recorded_at": "2026-01-02T08:06:50Z"
+    },
+    {
+      "id": "ex1",
+      "kind": "execute",
+      "commitment_id": "AU1",
+      "at": "2026-01-02T08:06:50Z",
+      "recorded_at": "2026-01-02T08:06:51Z"
+    },
+    {
+      "id": "nt1",
+      "kind": "notify",
+      "commitment_id": "AU2",
+      "at": "2026-01-02T08:06:52Z",
+      "detail": "hospital dispatch informed: shuttle release pending B-exit receipt",
+      "recorded_at": "2026-01-02T08:06:52Z"
+    }
+  ]
+}
