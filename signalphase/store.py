@@ -20,6 +20,16 @@ CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at T
 CREATE TABLE IF NOT EXISTS air_signature(id TEXT PRIMARY KEY,source_kind TEXT NOT NULL,channels_json TEXT NOT NULL,revision INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS air_sample(id TEXT PRIMARY KEY,site_id TEXT NOT NULL,observed_at TEXT NOT NULL,channels_json TEXT NOT NULL,wind_direction TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS air_advisory(id TEXT PRIMARY KEY,sample_id TEXT NOT NULL,nearest_source TEXT NOT NULL,distance REAL NOT NULL,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_calibration(id TEXT PRIMARY KEY,batch_id TEXT NOT NULL,bias_json TEXT NOT NULL,valid_from TEXT NOT NULL,valid_to TEXT NOT NULL,revision INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_route(id TEXT PRIMARY KEY,name TEXT NOT NULL,revision INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_segment(id TEXT PRIMARY KEY,route_id TEXT NOT NULL,seq_no INTEGER NOT NULL,length_m INTEGER NOT NULL,walk_seconds INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_reading(id TEXT PRIMARY KEY,segment_id TEXT NOT NULL,observed_at TEXT NOT NULL,channels_json TEXT NOT NULL,wind_direction TEXT NOT NULL,calibration_batch TEXT NOT NULL,fingerprint_version TEXT NOT NULL,station_coverage TEXT,state TEXT NOT NULL,state_reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_channel4(id TEXT PRIMARY KEY,segment_id TEXT NOT NULL,observed_at TEXT NOT NULL,value REAL NOT NULL,calibration_batch TEXT NOT NULL,fingerprint_version TEXT NOT NULL,wind_direction TEXT NOT NULL,state TEXT NOT NULL,state_reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_source_channel4(signature_id TEXT NOT NULL,fingerprint_version TEXT NOT NULL,value REAL NOT NULL,PRIMARY KEY(signature_id,fingerprint_version));
+CREATE TABLE IF NOT EXISTS walk_filter(id TEXT PRIMARY KEY,segment_id TEXT NOT NULL,observed_at TEXT NOT NULL,diesel_confirmed INTEGER NOT NULL,fingerprint_version TEXT NOT NULL,detail_json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_assessment(id TEXT PRIMARY KEY,routes_json TEXT NOT NULL,wind_direction TEXT NOT NULL,calibration_batch TEXT NOT NULL,fingerprint_version TEXT NOT NULL,status TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS walk_exposure(id TEXT PRIMARY KEY,assessment_id TEXT NOT NULL,route_id TEXT NOT NULL,segment_id TEXT NOT NULL,covered INTEGER NOT NULL,diesel_lower REAL,diesel_upper REAL,basis_state TEXT NOT NULL,filter_finding TEXT);
+CREATE TABLE IF NOT EXISTS walk_recommendation(id TEXT PRIMARY KEY,assessment_id TEXT NOT NULL,comparable INTEGER NOT NULL,winner_route_id TEXT,reason TEXT NOT NULL,route_bounds_json TEXT NOT NULL,uncovered_json TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):

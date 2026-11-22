@@ -1,0 +1,19 @@
+{
+  "events": [
+    {"id": "ws-d", "kind": "air_signature", "signature_id": "diesel", "source_kind": "diesel_exhaust", "channels": [4, 6, 2], "revision": 1, "recorded_at": "2026-01-01T08:00:00Z"},
+    {"id": "ws-u", "kind": "air_signature", "signature_id": "dust", "source_kind": "road_dust", "channels": [7, 2, 5], "revision": 1, "recorded_at": "2026-01-01T08:00:00Z"},
+    {"id": "ws-b", "kind": "air_signature", "signature_id": "bg", "source_kind": "secondary_background", "channels": [5.5, 4, 3.5], "revision": 1, "recorded_at": "2026-01-01T08:00:00Z"},
+    {"id": "wc-1", "kind": "walk_calibration", "calibration_id": "CAL-1", "batch_id": "batch-2026-01-02", "bias": [0, 0, 0, 0], "valid_from": "2026-01-02T00:00:00Z", "valid_to": "2026-01-03T00:00:00Z", "revision": 1, "recorded_at": "2026-01-01T18:00:00Z"},
+    {"id": "wr-e", "kind": "walk_route", "route_id": "east", "name": "east-via-school-gate", "revision": 1, "recorded_at": "2026-01-01T19:00:00Z"},
+    {"id": "wr-w", "kind": "walk_route", "route_id": "west", "name": "west-bypass", "revision": 1, "recorded_at": "2026-01-01T19:00:00Z"},
+    {"id": "wseg-e1", "kind": "walk_segment", "segment_id": "east-gate", "route_id": "east", "seq_no": 1, "length_m": 900, "walk_seconds": 1200, "recorded_at": "2026-01-01T19:05:00Z"},
+    {"id": "wseg-w1", "kind": "walk_segment", "segment_id": "west-north", "route_id": "west", "seq_no": 1, "length_m": 540, "walk_seconds": 720, "recorded_at": "2026-01-01T19:05:00Z"},
+    {"id": "wseg-w2", "kind": "walk_segment", "segment_id": "west-south", "route_id": "west", "seq_no": 2, "length_m": 540, "walk_seconds": 720, "recorded_at": "2026-01-01T19:05:00Z"},
+    {"id": "wc4-d", "kind": "walk_source_channel4", "signature_id": "diesel", "fingerprint_version": "fp-2026-01-02", "value": 9, "recorded_at": "2026-01-01T20:00:00Z"},
+    {"id": "wc4-u", "kind": "walk_source_channel4", "signature_id": "dust", "fingerprint_version": "fp-2026-01-02", "value": 1, "recorded_at": "2026-01-01T20:00:00Z"},
+    {"id": "wc4-b", "kind": "walk_source_channel4", "signature_id": "bg", "fingerprint_version": "fp-2026-01-02", "value": 3, "recorded_at": "2026-01-01T20:00:00Z"},
+    {"id": "wr-e1", "kind": "walk_reading", "reading_id": "WR-E1", "segment_id": "east-gate", "observed_at": "2026-01-02T08:05:00Z", "channels": [5.5, 4, 3.5], "wind_direction": "north", "calibration_batch": "batch-2026-01-02", "fingerprint_version": "fp-2026-01-02", "station_coverage": "fixed-station-AO1", "recorded_at": "2026-01-02T08:06:00Z"},
+    {"id": "wf-e1", "kind": "walk_filter", "filter_id": "WF-E1", "segment_id": "east-gate", "observed_at": "2026-01-02T08:10:00Z", "diesel_confirmed": true, "fingerprint_version": "fp-2026-01-02", "detail": {"chemistry": "elemental_carbon_marker"}, "recorded_at": "2026-01-02T08:12:00Z"},
+    {"id": "wa-1", "kind": "walk_assessment", "assessment_id": "WA-1", "routes": ["east", "west"], "wind_direction": "north", "calibration_batch": "batch-2026-01-02", "fingerprint_version": "fp-2026-01-02", "recorded_at": "2026-01-02T08:20:00Z"}
+  ]
+}

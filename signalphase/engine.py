@@ -4,7 +4,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, air, airadvisory
+from . import field, flow, plans, air, airadvisory, walk_exposure
 from .store import many, one, session
 
 HANDLERS = {
@@ -12,9 +12,23 @@ HANDLERS = {
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
     'air-import': {'air_signature': air.signature, 'air_sample': air.sample, 'air_check': airadvisory.check},
+    'walk-import': {
+        'air_signature': air.signature,
+        'walk_calibration': walk_exposure.calibration,
+        'walk_route': walk_exposure.route,
+        'walk_segment': walk_exposure.segment,
+        'walk_reading': walk_exposure.reading,
+        'walk_channel4': walk_exposure.channel4,
+        'walk_source_channel4': walk_exposure.source_channel4,
+        'walk_filter': walk_exposure.filter_analysis,
+        'walk_assessment': walk_exposure.assess,
+    },
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'air_signature', 'air_sample', 'air_advisory', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'air_signature', 'air_sample', 'air_advisory',
+          'walk_calibration', 'walk_route', 'walk_segment', 'walk_reading', 'walk_channel4',
+          'walk_source_channel4', 'walk_filter', 'walk_assessment', 'walk_exposure',
+          'walk_recommendation', 'decision')
 
 
 def _ingest(db, command, raw):
