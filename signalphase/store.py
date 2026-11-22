@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS controller(id TEXT PRIMARY KEY,plan_id TEXT NOT NULL,
 CREATE TABLE IF NOT EXISTS activation(id INTEGER PRIMARY KEY,plan_id TEXT NOT NULL,plan_revision INTEGER NOT NULL,controller_id TEXT NOT NULL,started_at TEXT NOT NULL,ended_at TEXT,status TEXT NOT NULL,reason TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS rollback(id INTEGER PRIMARY KEY,failed_controller TEXT NOT NULL,restored_plan TEXT NOT NULL,restored_revision INTEGER NOT NULL,at TEXT NOT NULL,reason TEXT NOT NULL,actor TEXT NOT NULL,affected_from TEXT NOT NULL,affected_to TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at TEXT NOT NULL,to_at TEXT NOT NULL,controller_id TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS fiber_route(id TEXT PRIMARY KEY,controller_id TEXT NOT NULL,propagation_km_per_us REAL NOT NULL,splice_km REAL NOT NULL,north_branch_km REAL NOT NULL,south_branch_km REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS fiber_echo(id TEXT PRIMARY KEY,route_id TEXT NOT NULL,measured_at TEXT NOT NULL,return_us REAL NOT NULL,amplitude REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS fiber_triage(id TEXT PRIMARY KEY,echo_id TEXT NOT NULL,distance_km REAL NOT NULL,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):
