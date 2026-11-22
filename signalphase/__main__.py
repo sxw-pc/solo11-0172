@@ -1,4 +1,4 @@
-"""Command line interface for the three signal decision ledgers."""
+"""Command line interface for the signal and bus evidence ledgers."""
 import argparse
 import json
 from pathlib import Path

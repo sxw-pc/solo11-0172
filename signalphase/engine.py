@@ -4,17 +4,22 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, bus, busload
+from . import field, flow, plans, bus, busload, bus_peak
 from .store import many, one, session
 
 HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
-    'bus-import': {'bus_trip': bus.trip, 'door_batch': bus.batch, 'load_check': busload.check},
+    'bus-import': {'bus_trip': bus.trip, 'door_batch': bus.batch, 'load_check': busload.check,
+                   'door_segment': bus_peak.segment, 'complaint': bus_peak.complaint,
+                   'stop_evidence': bus_peak.evidence, 'peak_assess': bus_peak.assess,
+                   'ruling_publish': bus_peak.publish},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'bus_trip', 'bus_door_batch', 'bus_load', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'bus_trip', 'bus_door_batch',
+          'bus_load', 'bus_door_segment', 'bus_complaint', 'bus_stop_evidence', 'bus_stop_peak',
+          'bus_complaint_ruling', 'decision')
 
 
 def _ingest(db, command, raw):

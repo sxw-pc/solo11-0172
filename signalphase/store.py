@@ -18,8 +18,13 @@ CREATE TABLE IF NOT EXISTS activation(id INTEGER PRIMARY KEY,plan_id TEXT NOT NU
 CREATE TABLE IF NOT EXISTS rollback(id INTEGER PRIMARY KEY,failed_controller TEXT NOT NULL,restored_plan TEXT NOT NULL,restored_revision INTEGER NOT NULL,at TEXT NOT NULL,reason TEXT NOT NULL,actor TEXT NOT NULL,affected_from TEXT NOT NULL,affected_to TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at TEXT NOT NULL,to_at TEXT NOT NULL,controller_id TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS bus_trip(id TEXT PRIMARY KEY,route_id TEXT NOT NULL,approach TEXT NOT NULL,capacity INTEGER NOT NULL,initial_load INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS bus_door_batch(id TEXT PRIMARY KEY,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,window_from TEXT NOT NULL,window_to TEXT NOT NULL,board_count INTEGER NOT NULL,alight_count INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS bus_load(id TEXT PRIMARY KEY,batch_id TEXT NOT NULL,trip_id TEXT NOT NULL,end_load INTEGER NOT NULL,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_door_batch(id TEXT PRIMARY KEY,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,window_from TEXT NOT NULL,window_to TEXT NOT NULL,board_count INTEGER NOT NULL,alight_count INTEGER NOT NULL,stop_seq INTEGER);
+CREATE TABLE IF NOT EXISTS bus_load(id TEXT PRIMARY KEY,batch_id TEXT NOT NULL,trip_id TEXT NOT NULL,start_load INTEGER NOT NULL,end_load INTEGER NOT NULL,chain TEXT NOT NULL,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_door_segment(id TEXT PRIMARY KEY,batch_id TEXT NOT NULL,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,door TEXT NOT NULL,gateway_id TEXT NOT NULL,clock_synced INTEGER NOT NULL,door_open_at TEXT NOT NULL,door_close_at TEXT NOT NULL,board_count INTEGER NOT NULL,alight_count INTEGER NOT NULL,events_json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_complaint(id TEXT PRIMARY KEY,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,window_from TEXT NOT NULL,window_to TEXT NOT NULL,description TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_stop_evidence(id TEXT PRIMARY KEY,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,method TEXT NOT NULL,coverage TEXT NOT NULL,detail_json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_stop_peak(id TEXT PRIMARY KEY,batch_id TEXT NOT NULL,trip_id TEXT NOT NULL,stop_id TEXT NOT NULL,start_load INTEGER NOT NULL,chain TEXT NOT NULL,peak_lo INTEGER NOT NULL,peak_hi INTEGER NOT NULL,capacity INTEGER NOT NULL,verdict TEXT NOT NULL,coverage TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bus_complaint_ruling(id TEXT NOT NULL,complaint_id TEXT NOT NULL,revision INTEGER NOT NULL,assessment_id TEXT NOT NULL,verdict TEXT NOT NULL,peak_lo INTEGER NOT NULL,peak_hi INTEGER NOT NULL,coverage TEXT NOT NULL,responsibility TEXT NOT NULL,reason TEXT NOT NULL,PRIMARY KEY(complaint_id,revision));
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):

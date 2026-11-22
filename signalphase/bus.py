@@ -16,8 +16,11 @@ def batch(db, e):
         raise ValueError('unknown_bus_trip')
     if e['window_from'] >= e['window_to'] or e['board_count'] < 0 or e['alight_count'] < 0:
         raise ValueError('invalid_door_batch')
-    db.execute('INSERT INTO bus_door_batch VALUES(?,?,?,?,?,?,?)',
+    seq = e.get('stop_seq')
+    if seq is not None and (not isinstance(seq, int) or isinstance(seq, bool) or seq < 1):
+        raise ValueError('invalid_door_batch')
+    db.execute('INSERT INTO bus_door_batch VALUES(?,?,?,?,?,?,?,?)',
                (e['batch_id'], e['trip_id'], e['stop_id'], e['window_from'], e['window_to'],
-                e['board_count'], e['alight_count']))
+                e['board_count'], e['alight_count'], seq))
     log(db, e, 'bus', e['batch_id'], 'captured', 'aggregate_door_counts')
     return 'captured'
