@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS controller(id TEXT PRIMARY KEY,plan_id TEXT NOT NULL,
 CREATE TABLE IF NOT EXISTS activation(id INTEGER PRIMARY KEY,plan_id TEXT NOT NULL,plan_revision INTEGER NOT NULL,controller_id TEXT NOT NULL,started_at TEXT NOT NULL,ended_at TEXT,status TEXT NOT NULL,reason TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS rollback(id INTEGER PRIMARY KEY,failed_controller TEXT NOT NULL,restored_plan TEXT NOT NULL,restored_revision INTEGER NOT NULL,at TEXT NOT NULL,reason TEXT NOT NULL,actor TEXT NOT NULL,affected_from TEXT NOT NULL,affected_to TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at TEXT NOT NULL,to_at TEXT NOT NULL,controller_id TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_well(id TEXT PRIMARY KEY,approach TEXT NOT NULL,storage_area_m2 REAL NOT NULL,valid_from TEXT NOT NULL,valid_to TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_level(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,observed_at TEXT NOT NULL,depth_m REAL NOT NULL,state TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_visit(id TEXT PRIMARY KEY,level_id TEXT NOT NULL,well_id TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):
