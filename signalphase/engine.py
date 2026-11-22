@@ -4,16 +4,17 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans
+from . import field, flow, plans, surface, lane
 from .store import many, one, session
 
 HANDLERS = {
     'flow-import': {'detector': flow.detector, 'sample': flow.sample, 'revoke': flow.revoke},
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
+    'surface-import': {'station': surface.station, 'frame': surface.frame, 'lane_check': lane.check},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'surface_station', 'surface_frame', 'lane_watch', 'decision')
 
 
 def _ingest(db, command, raw):
