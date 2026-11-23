@@ -1,0 +1,11 @@
+{"events":[
+{"id":"bw1","kind":"drain_well","well_id":"north-curb","approach":"north","storage_area_m2":10,"valid_from":"2026-01-01T00:00:00Z","valid_to":"2027-01-01T00:00:00Z","recorded_at":"2026-01-01T08:00:00Z"},
+{"id":"bl1","kind":"drain_level","level_id":"DL1","well_id":"north-curb","observed_at":"2026-01-02T08:00:00Z","depth_m":1.2,"recorded_at":"2026-01-02T08:01:00Z"},
+{"id":"bl2","kind":"drain_level","level_id":"DL2","well_id":"north-curb","observed_at":"2026-01-02T08:10:00Z","depth_m":1.3,"recorded_at":"2026-01-02T08:11:00Z"},
+{"id":"bv1","kind":"drain_visit","visit_id":"DV1","level_id":"DL1","recorded_at":"2026-01-02T08:02:00Z"},
+{"id":"bc1","kind":"drain_catchment","catchment_id":"roof-c","well_id":"north-curb","name":"roof-runoff","effective_area_m2":1000,"loss_coefficient":0.6,"radar_covered":true,"recorded_at":"2026-01-02T07:55:00Z"},
+{"id":"bc2","kind":"drain_catchment","catchment_id":"culvert-c","well_id":"north-curb","name":"underpass-culvert","effective_area_m2":2000,"loss_coefficient":0.5,"radar_covered":false,"recorded_at":"2026-01-02T07:55:00Z"},
+{"id":"bp1","kind":"drain_pump_power","pump_id":"pump-1","well_id":"north-curb","outlet_id":"outlet-1","energized_at":"2026-01-02T07:59:00Z","recorded_at":"2026-01-02T07:59:30Z"},
+{"id":"bs1","kind":"drain_scenario","scenario_id":"world-jia","well_id":"north-curb","from_at":"2026-01-02T08:00:00Z","to_at":"2026-01-02T08:10:00Z","weather":"storm_upstream","outlet_state":"open","terms":[{"kind":"inflow","point":"upstream-storm","rate_m3h":18},{"kind":"outflow","point":"outlet-1","rate_m3h":12}],"recorded_at":"2026-01-02T08:12:00Z"},
+{"id":"bs2","kind":"drain_scenario","scenario_id":"world-yi","well_id":"north-curb","from_at":"2026-01-02T08:00:00Z","to_at":"2026-01-02T08:10:00Z","weather":"ordinary","outlet_state":"blocked","terms":[{"kind":"inflow","point":"ordinary-inflow","rate_m3h":6},{"kind":"outflow","point":"outlet-1","rate_m3h":0}],"recorded_at":"2026-01-02T08:12:00Z"},
+{"id":"bb1","kind":"drain_balance","balance_id":"BAL1","well_id":"north-curb","level_ids":["DL1","DL2"],"recorded_at":"2026-01-02T08:15:00Z"}]}

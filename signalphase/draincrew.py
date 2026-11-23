@@ -1,4 +1,11 @@
-"""Provisional site visit from a single water-level threshold."""
+"""Provisional site visit from a single water-level threshold.
+
+``inspect`` is an attendance threshold for a field crew.  It is neither a
+blockage localization nor a pumped-volume estimate: a level at or above one
+metre only proves the crew should attend, never which outlet (if any) is
+blocked or how much water must be moved.  Readings outside the well
+calibration window cannot even reach that threshold and are *held*.
+"""
 from .store import one, log
 
 

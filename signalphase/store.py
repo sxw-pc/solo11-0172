@@ -20,6 +20,17 @@ CREATE TABLE IF NOT EXISTS disrupted_window(window_id TEXT PRIMARY KEY,from_at T
 CREATE TABLE IF NOT EXISTS drain_well(id TEXT PRIMARY KEY,approach TEXT NOT NULL,storage_area_m2 REAL NOT NULL,valid_from TEXT NOT NULL,valid_to TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS drain_level(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,observed_at TEXT NOT NULL,depth_m REAL NOT NULL,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS drain_visit(id TEXT PRIMARY KEY,level_id TEXT NOT NULL,well_id TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_catchment(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,name TEXT NOT NULL,effective_area_m2 REAL NOT NULL,loss_coefficient REAL NOT NULL,radar_covered INTEGER NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_rainfall(id TEXT PRIMARY KEY,catchment_id TEXT NOT NULL,well_id TEXT NOT NULL,from_at TEXT NOT NULL,to_at TEXT NOT NULL,intensity_mh REAL NOT NULL,inflow_m3h REAL NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_flow(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,point TEXT NOT NULL,direction TEXT NOT NULL,from_at TEXT NOT NULL,to_at TEXT NOT NULL,rate_m3h REAL NOT NULL,provenance TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_pump(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,outlet_id TEXT NOT NULL,energized_at TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_pump_receipt(id TEXT PRIMARY KEY,pump_id TEXT NOT NULL,well_id TEXT NOT NULL,outlet_id TEXT NOT NULL,from_at TEXT NOT NULL,to_at TEXT NOT NULL,volume_m3 REAL NOT NULL,rate_m3h REAL NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_scenario(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,from_at TEXT NOT NULL,to_at TEXT NOT NULL,weather TEXT NOT NULL,outlet_state TEXT NOT NULL,terms_json TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_balance(id TEXT PRIMARY KEY,well_id TEXT NOT NULL,from_at TEXT NOT NULL,to_at TEXT NOT NULL,level_count INTEGER NOT NULL,storage_change_m3 REAL NOT NULL,net_rate_m3h REAL NOT NULL,known_inflow_m3h REAL NOT NULL,known_outflow_m3h REAL NOT NULL,inflow_gap_m3h REAL NOT NULL,revision INTEGER NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_balance_solution(balance_id TEXT NOT NULL,scenario_id TEXT NOT NULL,weather TEXT NOT NULL,outlet_state TEXT NOT NULL,inflow_m3h REAL NOT NULL,outflow_m3h REAL NOT NULL,feasible INTEGER NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL,terms_json TEXT NOT NULL,PRIMARY KEY(balance_id,scenario_id));
+CREATE TABLE IF NOT EXISTS drain_balance_gap(balance_id TEXT NOT NULL,kind TEXT NOT NULL,source TEXT NOT NULL,missing_m3h REAL NOT NULL,note TEXT NOT NULL,PRIMARY KEY(balance_id,kind,source));
+CREATE TABLE IF NOT EXISTS drain_dispatch(id TEXT PRIMARY KEY,balance_id TEXT NOT NULL,well_id TEXT NOT NULL,revision INTEGER NOT NULL,action TEXT NOT NULL,target TEXT NOT NULL,state TEXT NOT NULL,reason TEXT NOT NULL,gap TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS drain_work_receipt(id TEXT PRIMARY KEY,dispatch_id TEXT NOT NULL,well_id TEXT NOT NULL,action TEXT NOT NULL,executed_at TEXT NOT NULL,work_hours REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS decision(id INTEGER PRIMARY KEY,event_id TEXT NOT NULL,subsystem TEXT NOT NULL,object_id TEXT NOT NULL,outcome TEXT NOT NULL,reason TEXT NOT NULL);
 """
 def connect(path):

@@ -4,7 +4,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, drain, draincrew
+from . import field, flow, plans, drain, draincrew, drain_balance
 from .store import many, one, session
 
 HANDLERS = {
@@ -12,9 +12,18 @@ HANDLERS = {
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
     'drain-import': {'drain_well': drain.well, 'drain_level': drain.level, 'drain_visit': draincrew.visit},
+    'drain-balance-import': {
+        'drain_well': drain.well, 'drain_level': drain.level, 'drain_visit': draincrew.visit,
+        'drain_catchment': drain_balance.catchment, 'drain_rainfall': drain_balance.rainfall,
+        'drain_flow': drain_balance.flow, 'drain_pump_power': drain_balance.pump_power,
+        'drain_pump_receipt': drain_balance.pump_receipt, 'drain_scenario': drain_balance.scenario,
+        'drain_balance': drain_balance.balance, 'drain_work_receipt': drain_balance.work_receipt},
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'drain_well', 'drain_level', 'drain_visit', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'drain_well', 'drain_level',
+          'drain_visit', 'drain_catchment', 'drain_rainfall', 'drain_flow', 'drain_pump',
+          'drain_pump_receipt', 'drain_scenario', 'drain_balance', 'drain_balance_solution',
+          'drain_balance_gap', 'drain_dispatch', 'drain_work_receipt', 'decision')
 
 
 def _ingest(db, command, raw):

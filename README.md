@@ -34,10 +34,23 @@ python -m signalphase report --db run.sqlite
 
 `fixtures/*-bad.json` 各给出一条业务失败样例。它们分别演示失准和异常样本、冲突相位、错版读回。导入计划或现场失败样例前，先按上面的单步顺序建立相应的流量和方案前置状态。失败样例会留下可查询的裁定记录，不会冒充成功启用。
 
+## 排水异常归因与器材派遣
+
+北进口雨水井水位越过一米只构成到场巡查门槛（`inspect`）：它既不定位出口堵塞，也不估计排水量。`drain-balance-import` 在同一账本上继续采录多时刻水位、井筒面积校准、汇水边界、夹装流量计读数、泵机通电与计量回执，并按体积守恒做归因：
+
+- 储量变化只用已标定井筒面积与有效期内的水位原件计算（10 m² × 0.1 m = 1 m³，十分钟即净增 6 m³/h）。同一井整段窗口的体积变化必须由同一组进/出流时间积分解释；分段速率不一致时所有候选平衡都被拒绝，不允许逐分钟换一个无来源出流。
+- 候选世界（如甲：入流 18/出流 12，乙：入流 6/出流 0）只要同时满足守恒和证据边界就全部保留，并各自登记待证缺口。净增 6 不能直接当成堵塞量，也不能把全部上涨归为暴雨。
+- 泵机通电只证明运行条件，不产生出流；只有夹装流量计或泵计量回执才算出流证据。雷达雨强必须按有效汇水面积与损失系数换算（mm/h × 面积 × 系数），未覆盖暗渠的雷达读数被排除，不能直接写成井内 m³/h。
+- 派遣随证据收敛：出口实测有流则只派上游短时调蓄并撤回未执行的清淤车；实测零流才派清通与临时泵；出口未证且至少有入流证据时只派便携泵与管道检查，不签发“已定位堵塞”。迟到证据生成新修订版，已执行的到场、清淤、泵工和排出水量原件永不改写。
+
+`fixtures/drain-balance.json` 给出共用同一对水位原件的甲乙两个守恒世界。`tests/test_drain_balance.py` 重放有效期从 `inspect` 到 `held` 的变化、同水位异处置反例、时序积分一致性、两条核查路线的派遣范围、泵回执边界与审计篡改。
+
 每个源文件和事件保留原文与 SHA。`audit` 从原始源文件在临时数据库重放全部业务表，并同时核对源文件和事件摘要；任何不一致都会在三项布尔结果中暴露。单文件导入使用 SQLite 事务，事件中途失败不会留下前半段决定。
 
 ## 数据格式
 
-导入文件为 `{ "events": [...] }`。每条事件有全局唯一 `id` 和 `kind`。`flow-import` 接受 `detector`、`sample`、`revoke`，`plan-import` 接受 `plan`，`field-import` 接受 `upload`、`fault`。具体字段见 `fixtures/demo`。时间使用 UTC ISO 8601 字符串，窗口编号由采样方提供；控制器读回必须给出行人过街距离、两种绿灯时长和完整相位图。
+导入文件为 `{ "events": [...] }`。每条事件有全局唯一 `id` 和 `kind`。`flow-import` 接受 `detector`、`sample`、`revoke`，`plan-import` 接受 `plan`，`field-import` 接受 `upload`、`fault`，`drain-balance-import` 接受 `drain_well`、`drain_level`、`drain_visit`、`drain_catchment`、`drain_rainfall`、`drain_flow`、`drain_pump_power`、`drain_pump_receipt`、`drain_scenario`、`drain_balance`、`drain_work_receipt`。具体字段见 `fixtures/demo` 与 `fixtures/drain-balance.json`。时间使用 UTC ISO 8601 字符串，窗口编号由采样方提供；控制器读回必须给出行人过街距离、两种绿灯时长和完整相位图。
+
+本仓库的离线环境没有预装 pytest，仓内 `pytest.py` 是仅用标准库 `unittest` 的最小命令垫片，使 `python -B -m pytest -q -p no:cacheprovider` 可直接运行；环境中若存在真实 pytest 会优先生效。
 
 本项目的安全步速使用 0.8 米/秒的合成演示值；真实道路配置应由当地审定参数替换。没有先前验证方案的现场故障会标为 `needs_manual_safe_mode`，不会伪造自动回退成功。
