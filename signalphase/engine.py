@@ -4,7 +4,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from . import field, flow, plans, fiber, fibertriage
+from . import field, flow, plans, fiber, fibertriage, fiber_branch
 from .store import many, one, session
 
 HANDLERS = {
@@ -12,9 +12,20 @@ HANDLERS = {
     'plan-import': {'plan': plans.submit},
     'field-import': {'upload': field.upload, 'fault': field.fault},
     'fiber-import': {'fiber_route': fiber.route, 'fiber_echo': fiber.echo, 'fiber_check': fibertriage.check},
+    'fiber-branch-import': {
+        'branch_topology': fiber_branch.topology,
+        'branch_echo': fiber_branch.branch_echo,
+        'remote_probe': fiber_branch.remote_probe,
+        'backup_switchover': fiber_branch.backup_switchover,
+        'branch_isolation': fiber_branch.branch_isolation,
+    },
 }
 TABLES = ('detector', 'vehicle_sample', 'demand', 'phase_plan', 'phase_plan_history', 'approval',
-          'controller', 'activation', 'rollback', 'disrupted_window', 'fiber_route', 'fiber_echo', 'fiber_triage', 'decision')
+          'controller', 'activation', 'rollback', 'disrupted_window', 'fiber_route', 'fiber_echo',
+          'fiber_triage', 'fiber_branch_topology', 'fiber_branch_topology_history',
+          'fiber_splice_template', 'fiber_branch_echo', 'fiber_remote_probe',
+          'fiber_backup_receipt', 'fiber_branch_isolation', 'fiber_service_window',
+          'fiber_work_order', 'fiber_work_order_candidate', 'decision')
 
 
 def _ingest(db, command, raw):
